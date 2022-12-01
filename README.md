@@ -48,7 +48,7 @@ which docker-compose
 
 Check Docker Compose compatibility :
 
- - [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
+ - [Compose file reference](https://docs.docker.com/compose/compose-file/)
 
 The following is optional but makes life more enjoyable :
 

@@ -80,7 +80,7 @@ This project use the following ports :
 | MySQL      | 3306 |
 | PHPMyAdmin | 8080 |
 | Nginx      | 8000 |
-| Nginx SSL  | 3000 |
+| Nginx SSL  | 4430 |
 | Redis      | 6379 |
 
 ---

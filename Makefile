@@ -50,7 +50,7 @@ init:
 	@$(shell cp -n $(shell pwd)/web/app/composer.json.dist $(shell pwd)/web/app/composer.json 2> /dev/null)
 
 apidoc:
-	@docker-compose exec -T php ./app/vendor/bin/apigen generate app/src --destination app/doc
+	@docker compose exec -T php ./app/vendor/bin/apigen generate app/src --destination app/doc
 	@make resetOwner
 
 clean:
@@ -64,34 +64,34 @@ clean:
 
 code-sniff:
 	@echo "Checking the standard code..."
-	@docker-compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 app/src
+	@docker compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 app/src
 
 composer-up:
 	@docker run --rm -v $(shell pwd)/web/app:/app composer update
 
 docker-start: init
-	docker-compose up -d
+	docker compose up -d
 
 docker-stop:
-	@docker-compose down -v
+	@docker compose down -v
 	@make clean
 
 gen-certs:
 	@docker run --rm -v $(shell pwd)/etc/ssl:/certificates -e "SERVER=$(NGINX_HOST)" jacoelho/generate-certificate
 
 logs:
-	@docker-compose logs -f
+	@docker compose logs -f
 
 mysql-dump:
 	@mkdir -p $(MYSQL_DUMPS_DIR)
-	@docker exec $(shell docker-compose ps -q mysqldb) mysqldump --all-databases -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" > $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
+	@docker exec $(shell docker compose ps -q mysqldb) mysqldump --all-databases -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" > $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
 	@make resetOwner
 
 mysql-restore:
-	@docker exec -i $(shell docker-compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
+	@docker exec -i $(shell docker compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
 
 test: code-sniff
-	@docker-compose exec -T php ./app/vendor/bin/phpunit --colors=always --configuration ./app/
+	@docker compose exec -T php ./app/vendor/bin/phpunit --colors=always --configuration ./app/
 	@make resetOwner
 
 resetOwner:
@@ -105,83 +105,83 @@ resetOwner:
 
 # Flush the application cache
 cache-clear:
-	@docker-compose exec app php artisan cache:clear
+	@docker compose exec php artisan cache:clear
 
 # Install composer dependencies
 composer-install:
-	@docker-compose exec app composer install
+	@docker compose exec php composer install
 
 # Update composer dependencies
 composer-update:
-	@docker-compose exec app composer update
+	@docker compose exec php composer update
 
 # Show outdated composer dependencies
 composer-outdated:
-	@docker-compose exec app composer outdated
+	@docker compose exec php composer outdated
 
 # PHP composer autoload command
 composer-autoload:
-	@docker-compose exec app composer dump-autoload
+	@docker compose exec php composer dump-autoload
 
 # Seed the database with records
 db-seed:
-	@docker-compose exec app php artisan db:seed
+	@docker compose exec php artisan db:seed
 
 # Migrate the database
 migrate:
-	@docker-compose exec app php artisan migrate
+	@docker compose exec php artisan migrate
 
 # Drop all tables and re-run all migrations
 migrate-fresh:
-	@docker-compose exec app php artisan migrate:fresh
+	@docker compose exec php artisan migrate:fresh
 
 # Create the migration repository
 migrate-install:
-	@docker-compose exec app php artisan migrate:refresh
+	@docker compose exec php artisan migrate:refresh
 
 # Reset and re-run all migrations
 migrate-refresh:
-	@docker-compose exec app php artisan migrate:refresh
+	@docker compose exec php artisan migrate:refresh
 
 # Rollback all database migrations
 migrate-reset:
-	@docker-compose exec app php artisan migrate:reset
+	@docker compose exec php artisan migrate:reset
 
 # Rollback the last database migration
 migrate-rollback:
-	@docker-compose exec app php artisan migrate:rollback
+	@docker compose exec php artisan migrate:rollback
 
 # Show the status of each migration
 migrate-status:
-	@docker-compose exec app php artisan migrate:status
+	@docker compose exec php artisan migrate:status
 
 # Install npm dependencies
 npm-install:
-	@docker-compose exec app npm install
+	@docker compose exec web/app npm install
 
 # Update npm dependencies
 npm-update:
-	@docker-compose exec app npm update
+	@docker compose exec php npm update
 
 # Show outdated npm dependencies
 npm-outdated:
-	@docker-compose exec app npm outdated
+	@docker compose exec php npm outdated
 
 # Running the queue listener
 queue-listen:
-	@docker-compose exec app php artisan queue:listen
+	@docker compose exec php artisan queue:listen
 
 # Running the queue worker
 queue-work:
-	@docker-compose exec app php artisan queue:work
+	@docker compose exec php artisan queue:work
 
 # Restart the queue process
 queue-restart:
-	@docker-compose exec app php artisan queue:restart
+	@docker compose exec php artisan queue:restart
 
 # Generate a symlink to the storage directory
 storage-link:
-	@docker-compose exec app php artisan storage:link --relative
+	@docker compose exec php artisan storage:link --relative
 
 # Give permissions of the storage folder to the www-data
 storage-perm:

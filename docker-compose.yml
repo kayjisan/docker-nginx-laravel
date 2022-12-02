@@ -50,10 +50,8 @@ services:
     tty: true
     ports:
       - "3306:3306"
-    env_file:
-      - .env
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      #MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -88,7 +86,7 @@ services:
     volumes:
       - ./data/redis:/data
       - ./data/redis/conf:/usr/local/etc/redis
-      - .//data/redis/log:/log
+      - ./data/redis/log:/log
     restart: always
     networks:
       - app
